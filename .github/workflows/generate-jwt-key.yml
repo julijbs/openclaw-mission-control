@@ -9,16 +9,23 @@ jobs:
     steps:
       - name: Generate PKCS8 private key and JWKS
         run: |
-          # Gera chave privada PKCS8
-          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 2>/dev/null > private.pem
+          # Gera chave privada PKCS8 (BEGIN PRIVATE KEY - não RSA PRIVATE KEY)
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out private.pem 2>/dev/null
           
-          echo "=== JWT_PRIVATE_KEY ==="
+          echo ""
+          echo "========================================="
+          echo "COLE ISSO NO CONVEX COMO JWT_PRIVATE_KEY"
+          echo "========================================="
           cat private.pem
+          echo "========================================="
+          
+          # Verifica que é mesmo PKCS8
+          head -1 private.pem
           
           # Gera chave pública
-          openssl rsa -in private.pem -pubout 2>/dev/null > public.pem
+          openssl rsa -in private.pem -pubout -out public.pem 2>/dev/null
           
-          # Gera JWKS usando node
+          # Gera JWKS
           node -e "
           const crypto = require('crypto');
           const fs = require('fs');
@@ -29,7 +36,10 @@ jobs:
           jwk.alg = 'RS256';
           jwk.kid = 'default';
           const jwks = { keys: [jwk] };
-          console.log('=== JWKS ===');
+          console.log('');
+          console.log('=========================================' );
+          console.log('COLE ISSO NO CONVEX COMO JWKS');
+          console.log('=========================================');
           console.log(JSON.stringify(jwks));
+          console.log('=========================================');
           "
-
