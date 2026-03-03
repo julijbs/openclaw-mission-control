@@ -64,7 +64,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenAgents, onOpenLiveFeed }) => {
 					</h1>
 				</div>
 				<div className="hidden sm:block text-xs text-muted-foreground bg-muted px-3 py-1 rounded-full font-medium">
-					SiteName
+					VicSystem
 				</div>
 			</div>
 
